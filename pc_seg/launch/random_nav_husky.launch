@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<!-- random controller -->
+<launch>
+    <param name="/use_sim_time" value="true" />
+    <node pkg="pc_seg" type="random_vel_husky.py" name="random_controller" output="screen"/>
+</launch>

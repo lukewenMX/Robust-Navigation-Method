@@ -1,0 +1,11 @@
+__pycache__/
+checkpoint/
+ckpt/
+data/
+range_image/
+samples/
+.vscode/
+**.npy
+**.npz
+*.zip
+Nanyang*/

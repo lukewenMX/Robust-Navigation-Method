@@ -1,0 +1,6 @@
+<!-- end2end2 navigation using cloud as input -->
+<?xml version="1.0"?>
+<launch>
+    <param name="/use_sim_time" value="false" />
+    <node pkg="pc_seg" type="pc_vel_husky.py" name="cloud_controller" output="screen"/>
+</launch>

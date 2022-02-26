@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+    <param name="/use_sim_time" value="false" />
+    <node pkg="pc_seg" type="range_img_vel_husky.py" name="range_img_vel_husky" output="screen"/>
+    <node pkg="topic_tools" type="throttle" name="velodyne_topic_throttler" args="messages /velodyne_points 5.0"/>
+    <!-- <node pkg="pc_seg" type="trajectory_record.py" name="trajectory_record" output="screen"/> -->
+</launch>

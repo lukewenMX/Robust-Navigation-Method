@@ -1,0 +1,14 @@
+<!-- offline comparison between cloud-based and image-based models -->
+<?xml version="1.0"?>
+<launch>
+    <param name="/use_sim_time" value="true" />
+    <node pkg="pc_seg" type="twist_republish" name="twist_republish" />
+    <node pkg="pc_seg" type="pc_img_vel_simulation.py" name="cloud_image_comparison" output="screen"/>
+    <node pkg="hector_trajectory_server" type="hector_trajectory_server" name="trajectory_server_loam" ns="base_link" >
+        <param name="/target_frame_name" value="map" />
+        <param name="/source_frame_name" value="base_link" />
+        <param name="/trajectory_update_rate" value="10.0" />
+        <param name="/trajectory_publish_rate" value="10.0" />
+    </node>
+    <node type="rviz" name="rviz" pkg="rviz" args="-d $(find pc_seg)/rviz/trajectory.rviz" />
+</launch>
