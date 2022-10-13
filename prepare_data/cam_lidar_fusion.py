@@ -18,9 +18,9 @@ import yaml
 from map import do_map, mini_name, map_kitti2mini, mini_color, kitti_colors
 from pt2range import LaserScan
 
-DATA_DIR = "./NanyangLinkNight2"
+DATA_DIR = "./NanyangLink"
 DATA_PATCH = 3
-
+print (os.path)
 def create_pc_fields():
     fields = []
     fields.append( PointField( 'x', 0, PointField.FLOAT32, 1 ) )
@@ -56,7 +56,7 @@ class CloudGenerator():
         self.vel_path = os.path.join(DATA_DIR, 'velocity', str(self.data_patch))
         self.raw_painted_path = os.path.join(DATA_DIR, 'class_viz', str(self.data_patch))
         self.mini_painted_path = os.path.join(DATA_DIR, 'miniclass_viz', str(self.data_patch))
-        
+        self.range_color_path = os.path.join(DATA_DIR,'depth_image',str(self.data_patch))
         self.pt2range_cvt = LaserScan(project=True, H=16, W=200, fov_up=15, fov_down=-15)
         
         os.makedirs(self.label_path, exist_ok=True)
@@ -64,6 +64,7 @@ class CloudGenerator():
         os.makedirs(self.vel_path, exist_ok=True)
         os.makedirs(self.raw_painted_path, exist_ok=True)
         os.makedirs(self.mini_painted_path, exist_ok=True)
+        os.makedirs(self.range_color_path,exist_ok=True)
 
         self.camera_model = PinholeCameraModel()
         self.img_width, self.img_height = img_res
@@ -230,7 +231,9 @@ class CloudGenerator():
             ## Range Image Conversion
             scan = np.array(new_pts)
             self.pt2range_cvt.set_points(points=scan[:,0:3],remissions=scan[:,3],label=scan[:,4],rings=scan[:,5])
-            range_img = self.pt2range_cvt.proj_range
+            
+            raw_range_img = self.pt2range_cvt.proj_range_no_completion
+            depth_img = self.pt2range_cvt.proj_range
             label_img = self.pt2range_cvt.proj_label
             color_range_img = self.pt2range_cvt.proj_color
             intensity_img = self.pt2range_cvt.proj_remission
@@ -238,6 +241,7 @@ class CloudGenerator():
             cv2.imwrite(os.path.join(self.img_path, '%06d.png' % (self.num)), cv_image)
             cv2.imwrite(os.path.join(self.raw_painted_path, '%06d.png' % (self.num)), color_img)
             cv2.imwrite(os.path.join(self.mini_painted_path, '%06d.png' % (self.num)), mini_color_img)
+            cv2.imwrite(os.path.join(self.range_color_path, '%06d.png' % (self.num), color_range_img))
             np.savez(os.path.join(self.label_path, 'pts_l%06d' % (self.num)), pts_l=new_pts)
             np.savez(os.path.join(self.vel_path, 'velocity%06d' % (self.num)), vel=velocity)
 
@@ -245,7 +249,7 @@ class CloudGenerator():
             
             # self.pub_image.publish(self.cv2_to_imgmsg(cv_temp))
             self.pub_image.publish(self.cv2_to_imgmsg(color_range_img, depth=False))
-            self.pub_image_raw.publish(self.cv2_to_imgmsg(range_img, depth=True))
+            self.pub_image_raw.publish(self.cv2_to_imgmsg(depth_img, depth=True))
             ros_cloud = sensor_msgs.point_cloud2.create_cloud(msg_cloud.header, create_pc_fields(), new_pts)
             self.pub_cloud.publish(ros_cloud)
             self.pub_velocity.publish(msg_velocity)
@@ -256,5 +260,6 @@ class CloudGenerator():
 if __name__ == '__main__':
     try:
         cloud_generator = CloudGenerator()
+        
     except rospy.ROSInterruptException:
         pass

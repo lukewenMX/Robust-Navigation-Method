@@ -1,15 +1,6 @@
-import os
-import math
-import random
-import numpy as np
-
 import rospy
-
 from nav_msgs.msg import Odometry
-
 from geometry_msgs.msg import Twist
-
-
 from sensor_msgs.point_cloud2 import read_points
 
 
@@ -31,7 +22,6 @@ class VelRepublisher():
         self.odometry.twist.twist.angular.y = data.angular.y
         self.odometry.twist.twist.angular.z = data.angular.z
         self.pub_odometry.publish(self.odometry)
-
 
 if __name__ == '__main__':
     try:
