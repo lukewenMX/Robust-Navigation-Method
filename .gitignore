@@ -9,3 +9,4 @@ samples/
 **.npz
 *.zip
 Nanyang*/
+*.bag
