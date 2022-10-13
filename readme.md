@@ -52,10 +52,11 @@ Replay the rosbag which you recorded, we have open sourced the generated dataset
 
 ## Results
 1. Qualitative and Quantitative Performance of Semantic point cloud network
-![Segmentation results](./images/segmentation.png) <dev align=center>
+![Segmentation results](./images/segmentation.png)
 ![Qualitative results](./images/qualitative%20performance.png)
-2. Qualitative of RNn, evaluated in sidewalk scenarios with two baselines： CNN & Random
-![navigation performance](./images/Navigation%20performance.png)
+2. Qualitative amd Quantitative performance of RNn, evaluated in sidewalk scenarios with two baselines： CNN & Random![navigation performance](./images/Navigation%20performance.png)
+![navigation screenshot](./images/sidewalk_navigation.png)
+
 
 ## Citation
 Please refer to our IROS 2022 paper for more details, which would be published soon, if you use any of the code.
